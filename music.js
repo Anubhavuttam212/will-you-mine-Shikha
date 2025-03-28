@@ -1,23 +1,24 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let audio;
+    let audio = new Audio("image/music.mp3"); // Ensure correct path
+    audio.loop = true;
 
-    // Check if audio is already playing
-    if (!window.localStorage.getItem("audioInitialized")) {
-        audio = new Audio("image/music.mp3"); // Ensure correct path
-        audio.loop = true;
+    let playButton = document.getElementById("playMusicBtn");
+
+    // Play music on button click
+    playButton.addEventListener("click", function () {
         audio.play();
-        window.localStorage.setItem("audioInitialized", "true");
+        playButton.style.display = "none"; // Hide button after play
+        localStorage.setItem("audioPlaying", "true");
+    });
 
-        // Store the audio instance globally
-        window.myAudio = audio;
-    } else {
-        audio = window.myAudio;
+    // Check if audio was playing before
+    if (localStorage.getItem("audioPlaying") === "true") {
+        audio.play();
+        playButton.style.display = "none"; // Auto-hide if already played
     }
 
-    // Store playback time
+    // Save playback time
     setInterval(() => {
-        if (audio) {
-            localStorage.setItem("musicTime", audio.currentTime);
-        }
+        localStorage.setItem("musicTime", audio.currentTime);
     }, 1000);
 });
