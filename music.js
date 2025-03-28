@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     audio.loop = true;
 
     let playButton = document.getElementById("playMusicBtn");
+    playButton.style.display = "block"; // Ensure button is always visible
 
     // Function to update button text
     function updateButton() {
