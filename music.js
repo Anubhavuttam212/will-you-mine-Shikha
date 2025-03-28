@@ -1,14 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let audio = document.getElementById("bg-music");
+    let audio;
 
-    // Check if music was already playing
-    if (localStorage.getItem("musicTime")) {
-        audio.currentTime = localStorage.getItem("musicTime");
+    // Check if audio is already playing
+    if (!window.localStorage.getItem("audioInitialized")) {
+        audio = new Audio("image/music.mp3"); // Ensure correct path
+        audio.loop = true;
+        audio.play();
+        window.localStorage.setItem("audioInitialized", "true");
+
+        // Store the audio instance globally
+        window.myAudio = audio;
+    } else {
+        audio = window.myAudio;
     }
-    audio.play();
 
-    // Update time in localStorage to keep track
+    // Store playback time
     setInterval(() => {
-        localStorage.setItem("musicTime", audio.currentTime);
+        if (audio) {
+            localStorage.setItem("musicTime", audio.currentTime);
+        }
     }, 1000);
 });
