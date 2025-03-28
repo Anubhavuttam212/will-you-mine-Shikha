@@ -2,8 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let audio = new Audio("image/music.mp3"); // Ensure correct path
     audio.loop = true;
 
-    let playButton = document.getElementById("playMusicBtn");
-    playButton.style.display = "block"; // Ensure button is always visible
+    // Ensure button exists before using it
+    let playButton = document.createElement("button");
+    playButton.id = "playMusicBtn";
+    playButton.textContent = "Play Music";
+    document.body.appendChild(playButton); // Now button will always be created
 
     // Function to update button text
     function updateButton() {
