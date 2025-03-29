@@ -1,26 +1,40 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let audio = new Audio("image/music.mp3"); // Ensure correct path
-    audio.loop = true;
-
-    // Ensure button exists before using it
-    let playButton = document.createElement("button");
-    playButton.id = "playMusicBtn";
-    playButton.textContent = "Play Music";
-    document.body.appendChild(playButton); // Now button will always be created
-
-    // Function to update button text
-    function updateButton() {
+    // Create audio element if it doesn't exist in localStorage
+    let audio;
+    
+    // Check if audio element already exists (created by another page)
+    if (!window.musicPlayer) {
+        audio = new Audio("image/music.mp3");
+        audio.loop = true;
+        window.musicPlayer = audio;
+        
+        // Set initial state from localStorage or default to paused
+        if (localStorage.getItem("audioPlaying") === "true") {
+            const savedTime = localStorage.getItem("musicTime");
+            if (savedTime) {
+                audio.currentTime = parseFloat(savedTime);
+            }
+            audio.play();
+        }
+    } else {
+        audio = window.musicPlayer;
+    }
+    
+    // Get or create the button
+    const playButton = document.getElementById("playMusicBtn") || document.createElement("button");
+    if (!document.getElementById("playMusicBtn")) {
+        playButton.id = "playMusicBtn";
+        document.body.appendChild(playButton);
+    }
+    
+    // Update button text based on current state
+    function updateButtonState() {
         playButton.textContent = audio.paused ? "Play Music" : "Pause Music";
     }
-
-    // Restore playback if already playing
-    if (localStorage.getItem("audioPlaying") === "true") {
-        audio.currentTime = localStorage.getItem("musicTime") ? parseFloat(localStorage.getItem("musicTime")) : 0;
-        audio.play();
-    }
-
-    updateButton(); // Set initial button text
-
+    
+    // Initial button text update
+    updateButtonState();
+    
     // Play/Pause functionality
     playButton.addEventListener("click", function () {
         if (audio.paused) {
@@ -30,11 +44,19 @@ document.addEventListener("DOMContentLoaded", function () {
             audio.pause();
             localStorage.setItem("audioPlaying", "false");
         }
-        updateButton();
+        updateButtonState();
     });
-
-    // Save playback time every second
+    
+    // Save playback time periodically
     setInterval(() => {
-        localStorage.setItem("musicTime", audio.currentTime);
+        if (!audio.paused) {
+            localStorage.setItem("musicTime", audio.currentTime);
+        }
     }, 1000);
+    
+    // Listen for before unload to save the current state
+    window.addEventListener("beforeunload", function() {
+        localStorage.setItem("audioPlaying", audio.paused ? "false" : "true");
+        localStorage.setItem("musicTime", audio.currentTime);
+    });
 });
