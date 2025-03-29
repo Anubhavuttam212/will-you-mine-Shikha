@@ -130,13 +130,7 @@ body {
     font-size: 35px;
     color: rgb(181, 12, 17);
     opacity: 0;
-    transform: translateY(-40px);
-    transition: 2s;
-}
-
-.warpper:hover .title h2 {
-    opacity: 1;
-    transform: translateY(0px);
+    transform: none;
 }
 
 .content p {
