@@ -12,6 +12,52 @@
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <script src="music.js"></script>
     <title>To You!</title>
+    <style>
+        .bucket-list-form {
+            text-align: left;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(255, 192, 203, 0.1);
+            border-radius: 10px;
+        }
+        
+        .bucket-list-form label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .bucket-list-form input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .bucket-list-form button {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background-color: #ff6b8b;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .bucket-list-form button:hover {
+            background-color: #ff4d73;
+            transform: scale(1.05);
+        }
+        
+        .success-message {
+            display: none;
+            color: #ff4d73;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
     <div class="warpper preloading">
@@ -26,16 +72,49 @@
                 </div>
                 <div class="content">
                     <div class="title">
-                        <h2>To You!</h2>
+                        <h2>To Shikha!</h2>
                     </div>
                     <p>
-                        You never know my feelings for you. I like you, heaven knows,
-                        earth knows, everyone knows except you. Have you ever thought
-                        you are very silly? When you are happy, you talk happily with me,
-                        when you are sad, I don't dare to say a word. Being friends with you
-                        is the thing I regret the most in my life. When will I have enough
-                        courage to break this shell called friendship and express my feelings to you?
+                        <strong>Shikha, ये हैं हमारे Future के कुछ Pinky Promises 🌸</strong>
                     </p>
+                    
+                    <h3>Adventures We'll Chase Together</h3>
+                    <p>
+                        1. "हर साल एक नई जगह घूमने जाएंगे – चाहे वो Ladakh की ठंडी हवाएँ हों या Kerala के हरे जंगल!" 🌄<br>  
+                        2. "Midnight मूवी मैराथन्स – Pizza, fairy lights, और वो भी तेरी पसंदीदा rom-coms!" 🍕🎬<br>  
+                        3. "एक साथ सीखेंगे कुछ नया – चाहे वो Salsa dance हो या Italian cooking classes!" 💃🍝
+                    </p>
+                    
+                    <h3>The Small Promises That Matter</h3>
+                    <p>
+                        1. "कभी भी तेरे पसंदीदा गाने बजाऊंगा जब तू sad feel करे… <em>और बीच में गाने पर झुमाऊंगा भी!</em>" 🎧😉<br>  
+                        2. "हर tough day के बाद तेरे लिए लाऊंगा – चॉकलेट, गप्पे, या बस एक tight hug!" 🍫🤗<br>  
+                        3. "कभी नहीं भूलूंगा – तेरी chai का perfect कद्दूकस किया हुआ अदरक!" ☕️
+                    </p>
+                    
+                    <h3>Bucket List for Us (इनमें से कुछ tick करते जाना!)</h3>
+                    <form id="bucketListForm" class="bucket-list-form">
+                        <label>
+                            <input type="checkbox" name="bucket_item" value="camping"> 
+                            Camping under the stars ✨ (तेरे लिए मैं खुद बनाऊंगा bonfire!)
+                        </label>
+                        <label>
+                            <input type="checkbox" name="bucket_item" value="roadtrip"> 
+                            Road trip where YOU choose the playlist 🚗🎶
+                        </label>
+                        <label>
+                            <input type="checkbox" name="bucket_item" value="plant"> 
+                            Plant a tree together 🌱 (और उसका नाम रखेंगे… <em>Shikha's Sunshine</em>?)
+                        </label>
+                        <button type="submit">Save Our Plans ❤️</button>
+                        <p id="successMessage" class="success-message">Our adventures are saved! Can't wait to start them together! 💕</p>
+                    </form>
+                    
+                    <h3>Final Promise</h3>
+                    <p>
+                        "चाहे life कितनी भी busy क्यों न हो, हमेशा तेरे साथ 'us' time बनाऊंगा… क्योंकि तू मेरी हर उलझन का solution है, और हर खुशी का reason है। 💖"
+                    </p>
+                    
                     <div class="gifs_left">
                         <img id="heart__letter" src="https://media.giphy.com/media/YKUvclrGYmDKXwtphf/giphy.gif" alt="" class="animationOp">
                     </div>
@@ -66,10 +145,67 @@
     <script src="music.js"></script>
 </body>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script>
-        $(window).on('load', function(event){
+<script>
+    $(window).on('load', function(event){
         $('body').removeClass('preloading');
         $('.loader-wrapper').delay(1000).fadeOut('fast');
     });
-    </script>
+    
+    // Bucket list form handling
+    document.getElementById('bucketListForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get selected items
+        const checkedItems = Array.from(this.querySelectorAll('input[type="checkbox"]:checked'))
+            .map(item => item.value);
+        
+        // Save to localStorage (optional)
+        localStorage.setItem('bucketListItems', JSON.stringify(checkedItems));
+        
+        // Show success message
+        document.getElementById('successMessage').style.display = 'block';
+        
+        // Optional: Add a heart animation
+        const heart = document.createElement('div');
+        heart.innerHTML = '❤️';
+        heart.style.position = 'absolute';
+        heart.style.fontSize = '30px';
+        heart.style.left = '50%';
+        heart.style.top = '50%';
+        heart.style.animation = 'float 2s ease-out forwards';
+        this.appendChild(heart);
+        
+        setTimeout(() => {
+            heart.remove();
+        }, 2000);
+        
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+            document.getElementById('successMessage').style.display = 'none';
+        }, 3000);
+    });
+    
+    // Check if there are previously saved items
+    window.addEventListener('DOMContentLoaded', function() {
+        const savedItems = JSON.parse(localStorage.getItem('bucketListItems') || '[]');
+        
+        // Check the saved items
+        savedItems.forEach(value => {
+            const checkbox = document.querySelector(`input[value="${value}"]`);
+            if (checkbox) checkbox.checked = true;
+        });
+    });
+</script>
+<style>
+    @keyframes float {
+        0% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-50%, -150%) scale(2);
+            opacity: 0;
+        }
+    }
+</style>
 </html>
